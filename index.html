@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quality and Company Employee Profile</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <p class="eyebrow">QUALITY AND COMPANY</p>
+      <h1>Employee Profile</h1>
+    </header>
+
+    <section id="loading" class="card">Loading employee profile…</section>
+
+    <section id="error" class="card" hidden>
+      <h2>Employee not found</h2>
+      <p>Please confirm the QR code or employee link.</p>
+    </section>
+
+    <article id="profile" class="profile" hidden>
+      <div class="photo-wrap">
+        <img id="photo" alt="Employee photo">
+      </div>
+      <div class="details">
+        <span id="status" class="badge"></span>
+        <h2 id="name"></h2>
+        <p id="jobTitle" class="job"></p>
+        <p id="department"></p>
+        <dl>
+          <div id="employeeIdRow"><dt>Employee ID</dt><dd id="employeeId"></dd></div>
+          <div id="emailRow"><dt>Email</dt><dd><a id="email"></a></dd></div>
+          <div id="workPhoneRow"><dt>Work phone</dt><dd><a id="workPhone"></a></dd></div>
+          <div id="cellPhoneRow"><dt>Cell phone</dt><dd><a id="cellPhone"></a></dd></div>
+        </dl>
+      </div>
+    </article>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

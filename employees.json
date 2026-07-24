@@ -1,0 +1,15 @@
+[
+  {
+    "id": 9,
+    "employeeId": "EMP009",
+    "firstName": "Sample",
+    "lastName": "Employee",
+    "jobTitle": "Job Title",
+    "department": "Department",
+    "email": "employee@example.com",
+    "workPhone": "905-555-0100",
+    "cellPhone": "647-555-0100",
+    "status": "Active",
+    "photo": "images/placeholder.svg"
+  }
+]
