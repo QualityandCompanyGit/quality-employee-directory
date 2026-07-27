@@ -20,6 +20,20 @@ const createPhoneLink = value => {
   return clean(value).replace(/[^+\d]/g, '');
 };
 
+const formatCanadianPhone = value => {
+  const digits = clean(value).replace(/\D/g, '');
+
+  if (digits.length === 11 && digits.startsWith('1')) {
+    return `+1 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
+  }
+
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+
+  return clean(value);
+};
+
 const setLink = (element, text, href) => {
   if (!element) {
     return;
@@ -42,13 +56,6 @@ async function start() {
   if (!employeeId) {
     throw new Error('Missing employee ID');
   }
-
-  /*
-    This project uses one JSON file for each employee.
-
-    Example:
-    ?id=20 loads employees/20.json
-  */
 
   const response = await fetch(
     `employees/${encodeURIComponent(employeeId)}.json`,
@@ -83,7 +90,7 @@ async function start() {
   const status = clean(employee.status) || 'Active';
   const email = clean(employee.email);
   const workPhone = clean(employee.workPhone);
-  const cellPhone = clean(employee.cellPhone);
+  const extension = clean(employee.extension);
 
   q('name').textContent =
     employeeName || 'Employee Profile';
@@ -92,6 +99,7 @@ async function start() {
   q('department').textContent = department;
   q('employeeId').textContent = displayedEmployeeId;
   q('status').textContent = status;
+  q('extension').textContent = extension;
 
   setRowVisibility(
     'employeeIdRow',
@@ -100,31 +108,34 @@ async function start() {
 
   setRowVisibility('emailRow', email);
   setRowVisibility('workPhoneRow', workPhone);
-  setRowVisibility('cellPhoneRow', cellPhone);
+  setRowVisibility('extensionRow', extension);
 
   const photo = q('photo');
   const fallbackPhoto = 'images/OIP.webp';
 
-const hasEmployeePhoto = Boolean(clean(employee.photo));
+  const hasEmployeePhoto = Boolean(
+    clean(employee.photo)
+  );
 
-photo.src = hasEmployeePhoto
-  ? clean(employee.photo)
-  : fallbackPhoto;
+  photo.src = hasEmployeePhoto
+    ? clean(employee.photo)
+    : fallbackPhoto;
 
-photo.classList.toggle(
-  'placeholder-photo',
-  !hasEmployeePhoto
-);
+  photo.classList.toggle(
+    'placeholder-photo',
+    !hasEmployeePhoto
+  );
 
-photo.alt = employeeName
-  ? `${employeeName} employee photo`
-  : 'Employee photo';
+  photo.alt = employeeName
+    ? `${employeeName} employee photo`
+    : 'Employee photo';
 
-photo.onerror = () => {
-  photo.onerror = null;
-  photo.src = fallbackPhoto;
-  photo.classList.add('placeholder-photo');
-};
+  photo.onerror = () => {
+    photo.onerror = null;
+    photo.src = fallbackPhoto;
+    photo.classList.add('placeholder-photo');
+  };
+
   setLink(
     q('email'),
     email,
@@ -133,17 +144,9 @@ photo.onerror = () => {
 
   setLink(
     q('workPhone'),
-    workPhone,
+    formatCanadianPhone(workPhone),
     workPhone
       ? `tel:${createPhoneLink(workPhone)}`
-      : ''
-  );
-
-  setLink(
-    q('cellPhone'),
-    cellPhone,
-    cellPhone
-      ? `tel:${createPhoneLink(cellPhone)}`
       : ''
   );
 
@@ -159,17 +162,14 @@ photo.onerror = () => {
     }
   }
 
-  const preferredPhone =
-    workPhone || cellPhone;
-
   const phoneButton = q('phoneButton');
 
   if (phoneButton) {
-    phoneButton.hidden = !preferredPhone;
+    phoneButton.hidden = !workPhone;
 
-    if (preferredPhone) {
+    if (workPhone) {
       phoneButton.href =
-        `tel:${createPhoneLink(preferredPhone)}`;
+        `tel:${createPhoneLink(workPhone)}`;
     } else {
       phoneButton.removeAttribute('href');
     }
