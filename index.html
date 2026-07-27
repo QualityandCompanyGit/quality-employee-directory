@@ -1,196 +1,149 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
+const q = id => document.getElementById(id);
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
+const row = (id, value) => {
+  const element = q(id);
 
-  <meta
-    name="description"
-    content="Quality & Company employee profile"
-  >
+  if (element) {
+    element.hidden = !value;
+  }
+};
 
-  <title>Quality & Company Employee Profile</title>
+const clean = value => {
+  if (value === null || value === undefined) {
+    return '';
+  }
 
-  <link rel="stylesheet" href="styles.css">
-</head>
+  return String(value).trim();
+};
 
-<body>
-  <div class="site">
+const phoneLink = value => {
+  return clean(value).replace(/[^+\d]/g, '');
+};
 
-    <header class="site-header">
-      <div class="header-inner">
-        <a
-          href="https://www.qualityandcompany.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Visit Quality & Company website"
-        >
-          <img
-            src="Logo.png"
-            alt="Quality & Company"
-            class="site-logo"
-          >
-        </a>
-      </div>
-    </header>
+async function start() {
+  const id = new URLSearchParams(location.search).get('id');
 
-    <main class="page-shell">
+  if (!id) {
+    throw new Error('Missing id');
+  }
 
-      <section
-        id="loading"
-        class="message-card"
-      >
-        Loading employee profile…
-      </section>
+  const response = await fetch(
+    `employees/${encodeURIComponent(id)}.json`,
+    { cache: 'no-store' }
+  );
 
-      <section
-        id="error"
-        class="message-card"
-        hidden
-      >
-        <h1>Employee not found</h1>
-        <p>Please confirm the QR code or employee link.</p>
-      </section>
+  if (!response.ok) {
+    throw new Error(
+      `Employee data load failed: ${response.status}`
+    );
+  }
 
-      <article
-        id="profile"
-        class="profile"
-        hidden
-      >
+  const employee = await response.json();
 
-        <div class="photo-column">
-          <div class="photo-wrap">
-            <img
-              id="photo"
-              alt="Employee photo"
-            >
-          </div>
-        </div>
+  const employeeName = [
+    clean(employee.salutation),
+    clean(employee.firstName),
+    clean(employee.lastName)
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-        <div class="details">
+  const jobTitle = clean(employee.jobTitle);
+  const department = clean(employee.department);
+  const employeeId = clean(employee.employeeId);
+  const status = clean(employee.status) || 'Active';
+  const email = clean(employee.email);
+  const workPhone = clean(employee.workPhone);
+  const cellPhone = clean(employee.cellPhone);
 
-          <div class="profile-heading">
-            <span
-              id="status"
-              class="badge"
-            ></span>
+  q('name').textContent = employeeName;
+  q('jobTitle').textContent = jobTitle;
+  q('department').textContent = department;
+  q('employeeId').textContent = employeeId;
+  q('status').textContent = status;
 
-            <h1
-              id="name"
-              class="employee-name"
-            ></h1>
+  row('employeeIdRow', employeeId);
+  row('emailRow', email);
+  row('workPhoneRow', workPhone);
+  row('cellPhoneRow', cellPhone);
 
-            <p
-              id="jobTitle"
-              class="job"
-            ></p>
+  const photo = q('photo');
 
-            <p
-              id="department"
-              class="department"
-            ></p>
-          </div>
+  photo.src = clean(employee.photo) || 'images/OIP.webp';
 
-          <div class="divider"></div>
+  photo.alt = employeeName
+    ? `${employeeName} employee photo`
+    : 'Employee photo';
 
-          <section class="contact-section">
-            <h2>Contact Information</h2>
+  photo.onerror = () => {
+    photo.onerror = null;
+    photo.src = 'images/OIP.webp';
+  };
 
-            <dl class="details-grid">
+  const emailLink = q('email');
 
-              <div
-                id="employeeIdRow"
-                class="detail-item"
-              >
-                <dt>Employee ID</dt>
-                <dd id="employeeId"></dd>
-              </div>
+  emailLink.textContent = email;
 
-              <div
-                id="emailRow"
-                class="detail-item"
-              >
-                <dt>Email</dt>
-                <dd>
-                  <a id="email"></a>
-                </dd>
-              </div>
+  if (email) {
+    emailLink.href = `mailto:${email}`;
+  } else {
+    emailLink.removeAttribute('href');
+  }
 
-              <div
-                id="workPhoneRow"
-                class="detail-item"
-              >
-                <dt>Work Phone</dt>
-                <dd>
-                  <a id="workPhone"></a>
-                </dd>
-              </div>
+  const workPhoneLink = q('workPhone');
 
-              <div
-                id="cellPhoneRow"
-                class="detail-item"
-              >
-                <dt>Cell Phone</dt>
-                <dd>
-                  <a id="cellPhone"></a>
-                </dd>
-              </div>
+  workPhoneLink.textContent = workPhone;
 
-            </dl>
-          </section>
+  if (workPhone) {
+    workPhoneLink.href = `tel:${phoneLink(workPhone)}`;
+  } else {
+    workPhoneLink.removeAttribute('href');
+  }
 
-          <div class="profile-actions">
+  const cellPhoneLink = q('cellPhone');
 
-            <a
-              id="emailButton"
-              class="button button-primary"
-              hidden
-            >
-              Send Email
-            </a>
+  cellPhoneLink.textContent = cellPhone;
 
-            <a
-              id="phoneButton"
-              class="button button-secondary"
-              hidden
-            >
-              Call
-            </a>
+  if (cellPhone) {
+    cellPhoneLink.href = `tel:${phoneLink(cellPhone)}`;
+  } else {
+    cellPhoneLink.removeAttribute('href');
+  }
 
-          </div>
+  const emailButton = q('emailButton');
 
-        </div>
-      </article>
+  emailButton.hidden = !email;
 
-    </main>
+  if (email) {
+    emailButton.href = `mailto:${email}`;
+  } else {
+    emailButton.removeAttribute('href');
+  }
 
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <p>
-          © <span id="year"></span> Quality & Company Inc.
-        </p>
+  const preferredPhone = workPhone || cellPhone;
+  const phoneButton = q('phoneButton');
 
-        <a
-          href="https://www.qualityandcompany.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          www.qualityandcompany.com
-        </a>
-      </div>
-    </footer>
+  phoneButton.hidden = !preferredPhone;
 
-  </div>
+  if (preferredPhone) {
+    phoneButton.href = `tel:${phoneLink(preferredPhone)}`;
+  } else {
+    phoneButton.removeAttribute('href');
+  }
 
-  <script>
-    document.getElementById('year').textContent =
-      new Date().getFullYear();
-  </script>
+  document.title = employeeName
+    ? `${employeeName} | Quality & Company`
+    : 'Quality & Company Employee Profile';
 
-  <script src="app.js"></script>
-</body>
-</html>
+  q('loading').hidden = true;
+  q('error').hidden = true;
+  q('profile').hidden = false;
+}
+
+start().catch(error => {
+  console.error(error);
+
+  q('loading').hidden = true;
+  q('profile').hidden = true;
+  q('error').hidden = false;
+});
