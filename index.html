@@ -38,10 +38,20 @@
         </header>
 
         <main class="page-content">
+
             <section
-                id="profileCard"
+                id="loading"
+                class="status-card"
+            >
+                <h1>Loading profile</h1>
+                <p>Please wait while the employee information loads.</p>
+            </section>
+
+            <section
+                id="profile"
                 class="profile-card"
-                aria-labelledby="employeeName"
+                aria-labelledby="name"
+                hidden
             >
                 <div class="profile-layout">
 
@@ -57,6 +67,7 @@
                     </div>
 
                     <div class="profile-information">
+
                         <div class="profile-heading">
                             <p
                                 id="department"
@@ -64,24 +75,31 @@
                             ></p>
 
                             <h1
-                                id="employeeName"
+                                id="name"
                                 class="profile-name"
-                            >
-                                Employee Name
-                            </h1>
+                            ></h1>
 
                             <p
                                 id="jobTitle"
                                 class="profile-title"
-                            >
-                                Position
-                            </p>
+                            ></p>
+
+                            <div class="profile-meta">
+                                <span id="employeeIdRow">
+                                    Employee ID:
+                                    <strong id="employeeId"></strong>
+                                </span>
+
+                                <span class="profile-meta-separator">•</span>
+
+                                <span>
+                                    Status:
+                                    <strong id="status"></strong>
+                                </span>
+                            </div>
                         </div>
 
-                        <div
-                            id="contactSection"
-                            class="information-section"
-                        >
+                        <div class="information-section">
                             <h2 class="section-title">Contact</h2>
 
                             <div class="contact-list">
@@ -99,12 +117,15 @@
 
                                     <span class="contact-content">
                                         <span class="contact-label">Email</span>
-                                        <span id="email" class="contact-value"></span>
+                                        <span
+                                            id="email"
+                                            class="contact-value"
+                                        ></span>
                                     </span>
                                 </a>
 
                                 <a
-                                    id="phoneRow"
+                                    id="workPhoneRow"
                                     class="contact-item"
                                     href="#"
                                 >
@@ -115,30 +136,18 @@
                                     </span>
 
                                     <span class="contact-content">
-                                        <span class="contact-label">Phone</span>
-                                        <span id="phone" class="contact-value"></span>
+                                        <span class="contact-label">Work Phone</span>
+                                        <span
+                                            id="workPhone"
+                                            class="contact-value"
+                                        ></span>
                                     </span>
                                 </a>
 
-                                <div
-                                    id="locationRow"
+                                <a
+                                    id="cellPhoneRow"
                                     class="contact-item"
-                                >
-                                    <span class="contact-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M12 2a8 8 0 0 0-8 8c0 5.5 8 12 8 12s8-6.5 8-12a8 8 0 0 0-8-8Zm0 11.2A3.2 3.2 0 1 1 12 6.8a3.2 3.2 0 0 1 0 6.4Z"/>
-                                        </svg>
-                                    </span>
-
-                                    <span class="contact-content">
-                                        <span class="contact-label">Location</span>
-                                        <span id="location" class="contact-value"></span>
-                                    </span>
-                                </div>
-
-                                <div
-                                    id="extensionRow"
-                                    class="contact-item"
+                                    href="#"
                                 >
                                     <span class="contact-icon" aria-hidden="true">
                                         <svg viewBox="0 0 24 24">
@@ -147,30 +156,23 @@
                                     </span>
 
                                     <span class="contact-content">
-                                        <span class="contact-label">Extension</span>
-                                        <span id="extension" class="contact-value"></span>
+                                        <span class="contact-label">Cell Phone</span>
+                                        <span
+                                            id="cellPhone"
+                                            class="contact-value"
+                                        ></span>
                                     </span>
-                                </div>
+                                </a>
 
                             </div>
                         </div>
 
-                        <div
-                            id="bioSection"
-                            class="information-section profile-bio-section"
-                        >
-                            <h2 class="section-title">About</h2>
-                            <p id="bio" class="profile-bio"></p>
-                        </div>
-
-                        <div
-                            id="actionSection"
-                            class="profile-actions"
-                        >
+                        <div class="profile-actions">
                             <a
                                 id="emailButton"
                                 class="button button-primary"
                                 href="#"
+                                hidden
                             >
                                 Send Email
                             </a>
@@ -179,24 +181,25 @@
                                 id="phoneButton"
                                 class="button button-secondary"
                                 href="#"
+                                hidden
                             >
                                 Call
                             </a>
                         </div>
+
                     </div>
                 </div>
             </section>
 
             <section
-                id="notFound"
+                id="error"
                 class="status-card"
                 hidden
             >
                 <h1>Profile unavailable</h1>
-                <p>
-                    The employee profile could not be found.
-                </p>
+                <p>The employee profile could not be found.</p>
             </section>
+
         </main>
 
         <footer class="site-footer">
@@ -207,15 +210,16 @@
                     class="footer-logo"
                 >
 
-                <p>
-                    Quality & Company
+                <p>Quality & Company</p>
+
+                <p
+                    class="footer-separator"
+                    aria-hidden="true"
+                >
+                    •
                 </p>
 
-                <p class="footer-separator" aria-hidden="true">•</p>
-
-                <p>
-                    Employee Directory
-                </p>
+                <p>Employee Directory</p>
             </div>
         </footer>
 
