@@ -1,0 +1,14 @@
+{
+  "name": "quality-employee-directory",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Quality & Company employee directory and automatic QR generator",
+  "scripts": {
+    "generate-qr": "node scripts/generate-qr.js"
+  },
+  "dependencies": {
+    "canvas": "^3.2.0",
+    "jsdom": "^26.1.0",
+    "qr-code-styling": "^1.9.2"
+  }
+}
