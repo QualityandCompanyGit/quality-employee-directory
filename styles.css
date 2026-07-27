@@ -1,23 +1,23 @@
 :root {
-  --page-bg: #f3f3f1;
-  --card-bg: #ffffff;
-  --soft-bg: #f8f8f6;
+  --page-background: #f3f3f1;
+  --card-background: #ffffff;
+  --soft-background: #f8f8f6;
 
-  --text: #171717;
-  --muted: #666660;
-  --light-text: #898983;
+  --text-primary: #171717;
+  --text-secondary: #61615d;
+  --text-light: #85857f;
 
   --border: #deded9;
   --border-light: #e9e9e5;
 
-  --max-width: 980px;
+  --page-width: 980px;
   --photo-width: 300px;
 
-  --radius-large: 22px;
-  --radius-medium: 16px;
-  --radius-small: 11px;
+  --large-radius: 22px;
+  --medium-radius: 16px;
+  --small-radius: 11px;
 
-  --shadow:
+  --card-shadow:
     0 22px 58px rgba(0, 0, 0, 0.08);
 }
 
@@ -30,7 +30,7 @@
 html {
   min-width: 320px;
   min-height: 100%;
-  background: var(--page-bg);
+  background: var(--page-background);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -39,8 +39,8 @@ body {
   min-height: 100vh;
   margin: 0;
 
-  color: var(--text);
-  background: var(--page-bg);
+  color: var(--text-primary);
+  background: var(--page-background);
 
   font-family:
     "Inter",
@@ -52,6 +52,7 @@ body {
 
   font-size: 16px;
   line-height: 1.5;
+
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -69,26 +70,42 @@ a {
   display: none !important;
 }
 
+.page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 .shell {
-  width: min(calc(100% - 32px), var(--max-width));
+  width: min(
+    calc(100% - 32px),
+    var(--page-width)
+  );
+
   margin-inline: auto;
 }
 
 /* Header */
 
-.profile-header {
+.site-header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.header-content {
   display: flex;
+  min-height: 104px;
   align-items: center;
   justify-content: center;
 
-  min-height: 106px;
-  padding: 24px 0;
+  padding-block: 22px;
 }
 
-.profile-header a {
+.logo-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
 }
 
 .logo {
@@ -97,14 +114,26 @@ a {
   object-fit: contain;
 }
 
+/* Main area */
+
+.main-content {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  padding-block: 46px 54px;
+}
+
 /* Loading and error */
 
 .message-card {
-  margin: 40px auto;
+  width: min(100%, 560px);
   padding: 38px 30px;
 
-  color: var(--muted);
-  background: var(--card-bg);
+  color: var(--text-secondary);
+  background: var(--card-background);
+
   border: 1px solid var(--border);
   border-radius: 18px;
 
@@ -117,51 +146,67 @@ a {
 .message-card h1 {
   margin: 0 0 8px;
 
-  color: var(--text);
+  color: var(--text-primary);
+
   font-size: 1.8rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
 }
 
 .message-card p {
   margin: 0;
 }
 
-/* Profile card */
+/* Profile */
 
-.profile {
+.profile-card {
   display: grid;
-  grid-template-columns: var(--photo-width) minmax(0, 1fr);
+  grid-template-columns:
+    var(--photo-width)
+    minmax(0, 1fr);
+
   gap: 40px;
 
-  margin: 10px 0 54px;
+  width: 100%;
   padding: 22px;
 
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-large);
+  background: var(--card-background);
 
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  border-radius: var(--large-radius);
+
+  box-shadow: var(--card-shadow);
 }
 
 /*
-The photo width remains fixed on desktop.
-Its height can grow with the employee information.
+  Photo width stays fixed on desktop.
+
+  The photo height follows the profile card, allowing the
+  profile to become taller when more information is added.
 */
 
+.photo-section {
+  display: flex;
+  width: var(--photo-width);
+}
+
 .photo-wrap {
+  position: relative;
+
   width: var(--photo-width);
   min-height: 430px;
   overflow: hidden;
 
   background: #ececea;
-  border-radius: var(--radius-medium);
+  border-radius: var(--medium-radius);
 }
 
 #photo {
+  position: absolute;
+  inset: 0;
+
   width: 100%;
   height: 100%;
-  min-height: 430px;
 
   object-fit: cover;
   object-position: center top;
@@ -169,15 +214,20 @@ Its height can grow with the employee information.
   background: #ececea;
 }
 
-/* Employee details */
+/* Profile details */
 
-.details {
+.profile-details {
   min-width: 0;
   align-self: center;
+
   padding: 24px 12px 24px 0;
 }
 
-.badge {
+.profile-heading {
+  min-width: 0;
+}
+
+.status-badge {
   display: inline-flex;
   align-items: center;
 
@@ -185,7 +235,8 @@ Its height can grow with the employee information.
   padding: 6px 11px;
 
   color: #555550;
-  background: var(--soft-bg);
+  background: var(--soft-background);
+
   border: 1px solid var(--border);
   border-radius: 999px;
 
@@ -196,7 +247,7 @@ Its height can grow with the employee information.
   text-transform: uppercase;
 }
 
-.badge:empty {
+.status-badge:empty {
   display: none;
 }
 
@@ -204,41 +255,34 @@ Its height can grow with the employee information.
   max-width: 100%;
   margin: 0;
 
-  color: var(--text);
-
-  font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  color: var(--text-primary);
 
   font-size: clamp(2rem, 4vw, 3.35rem);
   font-weight: 700;
   letter-spacing: -0.055em;
-  line-height: 1.03;
+  line-height: 1.04;
 
   white-space: nowrap;
 }
 
-.job {
+.job-title {
   margin: 14px 0 3px;
 
-  color: var(--muted);
+  color: var(--text-secondary);
 
   font-size: 1.08rem;
   font-weight: 600;
   line-height: 1.4;
 }
 
-.job:empty {
+.job-title:empty {
   display: none;
 }
 
 .department {
   margin: 0;
 
-  color: var(--light-text);
+  color: var(--text-light);
 
   font-size: 0.73rem;
   font-weight: 700;
@@ -255,7 +299,9 @@ Its height can grow with the employee information.
 
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
   gap: 11px;
 
   margin: 28px 0 0;
@@ -265,15 +311,16 @@ Its height can grow with the employee information.
   min-width: 0;
   padding: 14px 15px;
 
-  background: var(--soft-bg);
+  background: var(--soft-background);
+
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-small);
+  border-radius: var(--small-radius);
 }
 
 .contact-item dt {
   margin: 0 0 5px;
 
-  color: var(--light-text);
+  color: var(--text-light);
 
   font-size: 0.66rem;
   font-weight: 700;
@@ -286,7 +333,7 @@ Its height can grow with the employee information.
   min-width: 0;
   margin: 0;
 
-  color: var(--text);
+  color: var(--text-primary);
 
   font-size: 0.93rem;
   font-weight: 500;
@@ -301,7 +348,7 @@ Its height can grow with the employee information.
 }
 
 .contact-item a:hover {
-  text-decoration-color: var(--text);
+  text-decoration-color: var(--text-primary);
 }
 
 /* Buttons */
@@ -321,6 +368,7 @@ Its height can grow with the employee information.
 
   min-width: 128px;
   min-height: 44px;
+
   padding: 11px 20px;
 
   border: 1px solid transparent;
@@ -330,6 +378,8 @@ Its height can grow with the employee information.
   font-size: 0.87rem;
   font-weight: 600;
   line-height: 1;
+
+  text-align: center;
   text-decoration: none;
 
   transition:
@@ -363,29 +413,29 @@ Its height can grow with the employee information.
 }
 
 .button-secondary:hover {
-  background: var(--soft-bg);
+  background: var(--soft-background);
   border-color: #c6c6c0;
 }
 
 /* Footer */
 
-.footer {
-  padding: 25px 0 30px;
-
+.site-footer {
   background: #ffffff;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-light);
 }
 
 .footer-content {
   display: flex;
+  min-height: 82px;
   align-items: center;
   justify-content: center;
   gap: 16px;
 
+  padding-block: 18px;
+
   color: #7c7c76;
 
   font-size: 0.78rem;
-  font-weight: 400;
   text-align: center;
 }
 
@@ -411,44 +461,61 @@ Its height can grow with the employee information.
     --photo-width: 270px;
   }
 
-  .profile {
+  .profile-card {
     gap: 30px;
   }
 
   #name {
-    font-size: clamp(1.85rem, 4.5vw, 2.8rem);
+    font-size: clamp(
+      1.85rem,
+      4.5vw,
+      2.8rem
+    );
   }
 }
 
 /* Tablet and mobile */
 
 @media (max-width: 760px) {
-  .profile {
+  .main-content {
+    align-items: flex-start;
+    padding-block: 26px 36px;
+  }
+
+  .profile-card {
     grid-template-columns: 1fr;
-    gap: 26px;
+    gap: 25px;
+
     padding: 16px;
+  }
+
+  .photo-section {
+    width: 100%;
   }
 
   .photo-wrap {
     width: min(100%, 380px);
     min-height: 0;
     aspect-ratio: 4 / 5;
+
     margin-inline: auto;
   }
 
-  #photo {
-    min-height: 0;
-  }
-
-  .details {
+  .profile-details {
     padding: 3px 10px 20px;
     text-align: center;
   }
 
   #name {
-    white-space: normal;
     font-size: clamp(2rem, 10vw, 3rem);
     letter-spacing: -0.045em;
+
+    /*
+      On smaller screens, wrapping is allowed so long names
+      do not overflow outside the profile card.
+    */
+
+    white-space: normal;
   }
 
   .contact-grid {
@@ -470,12 +537,15 @@ Its height can grow with the employee information.
 
 @media (max-width: 420px) {
   .shell {
-    width: min(calc(100% - 20px), var(--max-width));
+    width: min(
+      calc(100% - 20px),
+      var(--page-width)
+    );
   }
 
-  .profile-header {
+  .header-content {
     min-height: 88px;
-    padding: 19px 0;
+    padding-block: 19px;
   }
 
   .logo {
@@ -483,7 +553,7 @@ Its height can grow with the employee information.
     max-height: 47px;
   }
 
-  .profile {
+  .profile-card {
     padding: 11px;
     border-radius: 17px;
   }
@@ -492,7 +562,7 @@ Its height can grow with the employee information.
     border-radius: 13px;
   }
 
-  .details {
+  .profile-details {
     padding-inline: 7px;
   }
 
@@ -507,36 +577,36 @@ Its height can grow with the employee information.
   }
 }
 
-/* Accessibility */
+/* Reduced motion */
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    scroll-behavior: auto !important;
     transition: none !important;
   }
 }
 
-/* Printing */
+/* Print */
 
 @media print {
   body {
     background: #ffffff;
   }
 
-  .profile-header,
-  .footer,
+  .site-header,
+  .site-footer,
   .profile-actions {
     display: none;
   }
 
+  .main-content,
   .shell {
     width: 100%;
+    padding: 0;
   }
 
-  .profile {
-    margin: 0;
+  .profile-card {
     border: 0;
     box-shadow: none;
   }
