@@ -22,3 +22,30 @@
 .footer a:hover{
     text-decoration:underline;
 }
+.employee-qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.employee-qr {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 18px;
+}
+
+.employee-qr-label {
+  margin: 0;
+  color: #5d6872;
+  font-size: 13px;
+  text-align: center;
+}
+
+.employee-qr-section[hidden],
+.employee-qr[hidden] {
+  display: none;
+}
