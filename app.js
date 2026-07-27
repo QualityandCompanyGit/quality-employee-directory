@@ -8,6 +8,35 @@ const row = (id, value) => {
   }
 };
 
+const clean = value => {
+  if (value === null || value === undefined) {
+    return '';
+  }
+
+  return String(value).trim();
+};
+
+const phoneLink = value => {
+  return clean(value).replace(/[^+\d]/g, '');
+};
+
+const validLinkedInUrl = value => {
+  const linkedIn = clean(value);
+
+  if (!linkedIn) {
+    return '';
+  }
+
+  if (
+    linkedIn.startsWith('https://') ||
+    linkedIn.startsWith('http://')
+  ) {
+    return linkedIn;
+  }
+
+  return `https://${linkedIn}`;
+};
+
 async function start() {
   const id = new URLSearchParams(location.search).get('id');
 
@@ -21,91 +50,114 @@ async function start() {
   );
 
   if (!response.ok) {
-    throw new Error(`Employee data load failed: ${response.status}`);
+    throw new Error(
+      `Employee data load failed: ${response.status}`
+    );
   }
 
   const employee = await response.json();
 
   const employeeName = [
-    employee.salutation,
-    employee.firstName,
-    employee.lastName
-  ].filter(Boolean).join(' ');
+    clean(employee.salutation),
+    clean(employee.firstName),
+    clean(employee.lastName)
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const jobTitle = clean(employee.jobTitle);
+  const department = clean(employee.department);
+  const employeeId = clean(employee.employeeId);
+  const status = clean(employee.status) || 'Active';
+  const email = clean(employee.email);
+  const workPhone = clean(employee.workPhone);
+  const cellPhone = clean(employee.cellPhone);
+  const linkedin = validLinkedInUrl(employee.linkedin);
 
   q('name').textContent = employeeName;
-  q('jobTitle').textContent = employee.jobTitle || '';
-  q('department').textContent = employee.department || '';
-  q('employeeId').textContent = employee.employeeId || '';
-  q('status').textContent = employee.status || 'Active';
+  q('jobTitle').textContent = jobTitle;
+  q('department').textContent = department;
+  q('employeeId').textContent = employeeId;
+  q('status').textContent = status;
+
+  row('employeeIdRow', employeeId);
+  row('emailRow', email);
+  row('workPhoneRow', workPhone);
+  row('cellPhoneRow', cellPhone);
+  row('linkedinRow', linkedin);
 
   const photo = q('photo');
 
-  photo.src = employee.photo || 'images/OIP.webp';
+  photo.src = clean(employee.photo) || 'images/OIP.webp';
+
   photo.alt = employeeName
-    ? `${employeeName} profile photo`
-    : 'Employee profile photo';
+    ? `${employeeName} employee photo`
+    : 'Employee photo';
 
   photo.onerror = () => {
     photo.onerror = null;
     photo.src = 'images/OIP.webp';
   };
 
-  q('email').textContent = employee.email || '';
+  q('email').textContent = email;
 
-  q('workPhone').textContent = employee.workPhone || '';
-
-  q('cellPhone').textContent = employee.cellPhone || '';
-
-  row('employeeIdRow', employee.employeeId);
-  row('emailRow', employee.email);
-  row('workPhoneRow', employee.workPhone);
-  row('cellPhoneRow', employee.cellPhone);
-
-  const emailRow = q('emailRow');
-
-  if (emailRow) {
-    emailRow.href = employee.email
-      ? `mailto:${employee.email}`
-      : '#';
+  if (email) {
+    q('email').href = `mailto:${email}`;
+  } else {
+    q('email').removeAttribute('href');
   }
 
-  const workPhoneRow = q('workPhoneRow');
+  q('workPhone').textContent = workPhone;
 
-  if (workPhoneRow) {
-    workPhoneRow.href = employee.workPhone
-      ? `tel:${employee.workPhone.replace(/[^+\d]/g, '')}`
-      : '#';
+  if (workPhone) {
+    q('workPhone').href = `tel:${phoneLink(workPhone)}`;
+  } else {
+    q('workPhone').removeAttribute('href');
   }
 
-  const cellPhoneRow = q('cellPhoneRow');
+  q('cellPhone').textContent = cellPhone;
 
-  if (cellPhoneRow) {
-    cellPhoneRow.href = employee.cellPhone
-      ? `tel:${employee.cellPhone.replace(/[^+\d]/g, '')}`
-      : '#';
+  if (cellPhone) {
+    q('cellPhone').href = `tel:${phoneLink(cellPhone)}`;
+  } else {
+    q('cellPhone').removeAttribute('href');
+  }
+
+  if (linkedin) {
+    q('linkedin').href = linkedin;
+  } else {
+    q('linkedin').removeAttribute('href');
   }
 
   const emailButton = q('emailButton');
 
-  if (emailButton) {
-    emailButton.hidden = !employee.email;
-    emailButton.href = employee.email
-      ? `mailto:${employee.email}`
-      : '#';
+  emailButton.hidden = !email;
+
+  if (email) {
+    emailButton.href = `mailto:${email}`;
+  } else {
+    emailButton.removeAttribute('href');
   }
 
+  const preferredPhone = workPhone || cellPhone;
   const phoneButton = q('phoneButton');
 
-  if (phoneButton) {
-    const preferredPhone =
-      employee.workPhone ||
-      employee.cellPhone ||
-      '';
+  phoneButton.hidden = !preferredPhone;
 
-    phoneButton.hidden = !preferredPhone;
-    phoneButton.href = preferredPhone
-      ? `tel:${preferredPhone.replace(/[^+\d]/g, '')}`
-      : '#';
+  if (preferredPhone) {
+    phoneButton.href = `tel:${phoneLink(preferredPhone)}`;
+  } else {
+    phoneButton.removeAttribute('href');
+  }
+
+  const linkedinButton = q('linkedinButton');
+
+  linkedinButton.hidden = !linkedin;
+
+  if (linkedin) {
+    linkedinButton.href = linkedin;
+  } else {
+    linkedinButton.removeAttribute('href');
   }
 
   document.title = employeeName
