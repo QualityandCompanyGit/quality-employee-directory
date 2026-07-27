@@ -105,18 +105,26 @@ async function start() {
   const photo = q('photo');
   const fallbackPhoto = 'images/OIP.webp';
 
-  photo.src =
-    clean(employee.photo) || fallbackPhoto;
+const hasEmployeePhoto = Boolean(clean(employee.photo));
 
-  photo.alt = employeeName
-    ? `${employeeName} employee photo`
-    : 'Employee photo';
+photo.src = hasEmployeePhoto
+  ? clean(employee.photo)
+  : fallbackPhoto;
 
-  photo.onerror = () => {
-    photo.onerror = null;
-    photo.src = fallbackPhoto;
-  };
+photo.classList.toggle(
+  'placeholder-photo',
+  !hasEmployeePhoto
+);
 
+photo.alt = employeeName
+  ? `${employeeName} employee photo`
+  : 'Employee photo';
+
+photo.onerror = () => {
+  photo.onerror = null;
+  photo.src = fallbackPhoto;
+  photo.classList.add('placeholder-photo');
+};
   setLink(
     q('email'),
     email,
