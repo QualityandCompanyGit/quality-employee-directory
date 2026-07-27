@@ -1,230 +1,231 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="utf-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, viewport-fit=cover"
-    >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
 
-    <meta
-        name="description"
-        content="Quality & Company employee profile"
-    >
+  <meta
+    name="description"
+    content="Quality & Company employee profile"
+  >
 
-    <title>Employee Profile | Quality & Company</title>
+  <title>Quality & Company Employee Profile</title>
 
-    <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="site-shell">
+  <div class="site">
 
-        <header class="site-header">
-            <div class="header-inner">
-                <a
-                    class="brand"
-                    href="./"
-                    aria-label="Quality & Company"
-                >
-                    <img
-                        src="logo.png"
-                        alt="Quality & Company"
-                        class="brand-logo"
-                    >
-                </a>
-            </div>
-        </header>
+    <header class="site-header">
+      <div class="header-inner">
+        <a
+          href="https://www.qualityandcompany.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="brand"
+          aria-label="Visit Quality & Company"
+        >
+          <img
+            src="Logo.png"
+            alt="Quality & Company"
+            class="brand-logo"
+          >
+        </a>
+      </div>
+    </header>
 
-        <main class="page-content">
+    <main class="page-shell">
 
-            <section
-                id="loading"
-                class="status-card"
+      <section
+        id="loading"
+        class="message-card"
+      >
+        <div class="loading-mark" aria-hidden="true"></div>
+        <h1>Loading profile</h1>
+        <p>Please wait while the employee information loads.</p>
+      </section>
+
+      <section
+        id="error"
+        class="message-card"
+        hidden
+      >
+        <h1>Employee not found</h1>
+        <p>Please confirm the QR code or employee link.</p>
+      </section>
+
+      <article
+        id="profile"
+        class="profile-card"
+        hidden
+      >
+        <div class="profile-photo-area">
+          <div class="photo-frame">
+            <img
+              id="photo"
+              class="employee-photo"
+              alt="Employee photo"
             >
-                <h1>Loading profile</h1>
-                <p>Please wait while the employee information loads.</p>
-            </section>
+          </div>
+        </div>
 
-            <section
-                id="profile"
-                class="profile-card"
-                aria-labelledby="name"
+        <div class="profile-content">
+
+          <div class="profile-heading">
+            <span
+              id="status"
+              class="status-badge"
+            ></span>
+
+            <h1 id="name" class="employee-name"></h1>
+
+            <p
+              id="jobTitle"
+              class="job-title"
+            ></p>
+
+            <p
+              id="department"
+              class="department"
+            ></p>
+          </div>
+
+          <div class="profile-divider"></div>
+
+          <section class="information-section">
+            <h2 class="section-title">Contact Information</h2>
+
+            <dl class="details-grid">
+
+              <div
+                id="employeeIdRow"
+                class="detail-item"
+              >
+                <dt>Employee ID</dt>
+                <dd id="employeeId"></dd>
+              </div>
+
+              <div
+                id="emailRow"
+                class="detail-item"
+              >
+                <dt>Email</dt>
+                <dd>
+                  <a id="email"></a>
+                </dd>
+              </div>
+
+              <div
+                id="workPhoneRow"
+                class="detail-item"
+              >
+                <dt>Work Phone</dt>
+                <dd>
+                  <a id="workPhone"></a>
+                </dd>
+              </div>
+
+              <div
+                id="cellPhoneRow"
+                class="detail-item"
+              >
+                <dt>Cell Phone</dt>
+                <dd>
+                  <a id="cellPhone"></a>
+                </dd>
+              </div>
+
+              <div
+                id="linkedinRow"
+                class="detail-item"
                 hidden
+              >
+                <dt>LinkedIn</dt>
+                <dd>
+                  <a
+                    id="linkedin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Profile
+                  </a>
+                </dd>
+              </div>
+
+            </dl>
+          </section>
+
+          <div class="profile-actions">
+            <a
+              id="emailButton"
+              class="action-button action-primary"
+              hidden
             >
-                <div class="profile-layout">
+              Send Email
+            </a>
 
-                    <div class="profile-photo-column">
-                        <div class="profile-photo-frame">
-                            <img
-                                id="photo"
-                                class="profile-photo"
-                                src=""
-                                alt="Employee profile photo"
-                            >
-                        </div>
-                    </div>
-
-                    <div class="profile-information">
-
-                        <div class="profile-heading">
-                            <p
-                                id="department"
-                                class="profile-department"
-                            ></p>
-
-                            <h1
-                                id="name"
-                                class="profile-name"
-                            ></h1>
-
-                            <p
-                                id="jobTitle"
-                                class="profile-title"
-                            ></p>
-
-                            <div class="profile-meta">
-                                <span id="employeeIdRow">
-                                    Employee ID:
-                                    <strong id="employeeId"></strong>
-                                </span>
-
-                                <span class="profile-meta-separator">•</span>
-
-                                <span>
-                                    Status:
-                                    <strong id="status"></strong>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="information-section">
-                            <h2 class="section-title">Contact</h2>
-
-                            <div class="contact-list">
-
-                                <a
-                                    id="emailRow"
-                                    class="contact-item"
-                                    href="#"
-                                >
-                                    <span class="contact-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M3 5h18v14H3V5Zm9 7 7-5H5l7 5Zm0 2.5L5 9.6V17h14V9.6l-7 4.9Z"/>
-                                        </svg>
-                                    </span>
-
-                                    <span class="contact-content">
-                                        <span class="contact-label">Email</span>
-                                        <span
-                                            id="email"
-                                            class="contact-value"
-                                        ></span>
-                                    </span>
-                                </a>
-
-                                <a
-                                    id="workPhoneRow"
-                                    class="contact-item"
-                                    href="#"
-                                >
-                                    <span class="contact-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M7.1 2.5 10 7.3 7.8 9.5c1.2 2.4 3.3 4.5 5.7 5.7l2.2-2.2 4.8 2.9c.4.2.6.7.5 1.1-.4 2.6-2.6 4.5-5.2 4.5C8.5 21.5 2.5 15.5 2.5 8.2 2.5 5.6 4.4 3.4 7 3c.4-.1.9.1 1.1.5Z"/>
-                                        </svg>
-                                    </span>
-
-                                    <span class="contact-content">
-                                        <span class="contact-label">Work Phone</span>
-                                        <span
-                                            id="workPhone"
-                                            class="contact-value"
-                                        ></span>
-                                    </span>
-                                </a>
-
-                                <a
-                                    id="cellPhoneRow"
-                                    class="contact-item"
-                                    href="#"
-                                >
-                                    <span class="contact-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm6 17a1.2 1.2 0 1 0 0-2.4A1.2 1.2 0 0 0 12 19Zm-5-5h10V5H7v9Z"/>
-                                        </svg>
-                                    </span>
-
-                                    <span class="contact-content">
-                                        <span class="contact-label">Cell Phone</span>
-                                        <span
-                                            id="cellPhone"
-                                            class="contact-value"
-                                        ></span>
-                                    </span>
-                                </a>
-
-                            </div>
-                        </div>
-
-                        <div class="profile-actions">
-                            <a
-                                id="emailButton"
-                                class="button button-primary"
-                                href="#"
-                                hidden
-                            >
-                                Send Email
-                            </a>
-
-                            <a
-                                id="phoneButton"
-                                class="button button-secondary"
-                                href="#"
-                                hidden
-                            >
-                                Call
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-            <section
-                id="error"
-                class="status-card"
-                hidden
+            <a
+              id="phoneButton"
+              class="action-button action-secondary"
+              hidden
             >
-                <h1>Profile unavailable</h1>
-                <p>The employee profile could not be found.</p>
-            </section>
+              Call
+            </a>
 
-        </main>
+            <a
+              id="linkedinButton"
+              class="action-button action-secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              hidden
+            >
+              LinkedIn
+            </a>
+          </div>
 
-        <footer class="site-footer">
-            <div class="footer-inner">
-                <img
-                    src="logo.png"
-                    alt=""
-                    class="footer-logo"
-                >
+        </div>
+      </article>
 
-                <p>Quality & Company</p>
+    </main>
 
-                <p
-                    class="footer-separator"
-                    aria-hidden="true"
-                >
-                    •
-                </p>
+    <footer class="site-footer">
+      <div class="footer-inner">
 
-                <p>Employee Directory</p>
-            </div>
-        </footer>
+        <img
+          src="Logo.png"
+          alt=""
+          class="footer-logo"
+        >
 
-    </div>
+        <div class="footer-text">
+          <p>
+            © <span id="year"></span> Quality & Company Inc.
+          </p>
 
-    <script src="app.js"></script>
+          <a
+            href="https://www.qualityandcompany.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            www.qualityandcompany.com
+          </a>
+        </div>
+
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById('year').textContent =
+      new Date().getFullYear();
+  </script>
+
+  <script src="app.js"></script>
 </body>
 </html>
