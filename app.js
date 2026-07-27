@@ -38,11 +38,6 @@ async function start() {
   q('employeeId').textContent = employee.employeeId || '';
   q('status').textContent = employee.status || 'Active';
 
-  row('jobTitleRow', employee.jobTitle);
-  row('departmentRow', employee.department);
-  row('employeeIdRow', employee.employeeId);
-  row('statusRow', employee.status || 'Active');
-
   const photo = q('photo');
 
   photo.src = employee.photo || 'images/OIP.webp';
@@ -56,23 +51,62 @@ async function start() {
   };
 
   q('email').textContent = employee.email || '';
-  q('email').href = employee.email
-    ? `mailto:${employee.email}`
-    : '#';
 
   q('workPhone').textContent = employee.workPhone || '';
-  q('workPhone').href = employee.workPhone
-    ? `tel:${employee.workPhone.replace(/[^+\d]/g, '')}`
-    : '#';
 
   q('cellPhone').textContent = employee.cellPhone || '';
-  q('cellPhone').href = employee.cellPhone
-    ? `tel:${employee.cellPhone.replace(/[^+\d]/g, '')}`
-    : '#';
 
+  row('employeeIdRow', employee.employeeId);
   row('emailRow', employee.email);
   row('workPhoneRow', employee.workPhone);
   row('cellPhoneRow', employee.cellPhone);
+
+  const emailRow = q('emailRow');
+
+  if (emailRow) {
+    emailRow.href = employee.email
+      ? `mailto:${employee.email}`
+      : '#';
+  }
+
+  const workPhoneRow = q('workPhoneRow');
+
+  if (workPhoneRow) {
+    workPhoneRow.href = employee.workPhone
+      ? `tel:${employee.workPhone.replace(/[^+\d]/g, '')}`
+      : '#';
+  }
+
+  const cellPhoneRow = q('cellPhoneRow');
+
+  if (cellPhoneRow) {
+    cellPhoneRow.href = employee.cellPhone
+      ? `tel:${employee.cellPhone.replace(/[^+\d]/g, '')}`
+      : '#';
+  }
+
+  const emailButton = q('emailButton');
+
+  if (emailButton) {
+    emailButton.hidden = !employee.email;
+    emailButton.href = employee.email
+      ? `mailto:${employee.email}`
+      : '#';
+  }
+
+  const phoneButton = q('phoneButton');
+
+  if (phoneButton) {
+    const preferredPhone =
+      employee.workPhone ||
+      employee.cellPhone ||
+      '';
+
+    phoneButton.hidden = !preferredPhone;
+    phoneButton.href = preferredPhone
+      ? `tel:${preferredPhone.replace(/[^+\d]/g, '')}`
+      : '#';
+  }
 
   document.title = employeeName
     ? `${employeeName} | Quality & Company`
