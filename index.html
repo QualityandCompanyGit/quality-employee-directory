@@ -15,121 +15,190 @@
 
   <title>Quality & Company Employee Profile</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <main class="shell">
+  <div class="page">
 
-    <header class="profile-header">
-      <a
-        href="https://www.qualityandcompany.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="logo.png"
-          alt="Quality & Company"
-          class="logo"
+    <header class="site-header">
+      <div class="shell header-content">
+        <a
+          class="logo-link"
+          href="https://www.qualityandcompany.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit Quality & Company"
         >
-      </a>
+          <img
+            class="logo"
+            src="Logo.png"
+            alt="Quality & Company"
+          >
+        </a>
+      </div>
     </header>
 
-    <section id="loading" class="message-card">
-      Loading employee profile…
-    </section>
+    <main class="shell main-content">
 
-    <section id="error" class="message-card" hidden>
-      <h1>Employee not found</h1>
-      <p>Please confirm the QR code or employee link.</p>
-    </section>
+      <section
+        id="loading"
+        class="message-card"
+        aria-live="polite"
+      >
+        Loading employee profile…
+      </section>
 
-    <article id="profile" class="profile" hidden>
+      <section
+        id="error"
+        class="message-card"
+        hidden
+      >
+        <h1>Employee not found</h1>
 
-      <div class="photo-wrap">
-        <img id="photo" alt="Employee photo">
-      </div>
+        <p>
+          Please confirm the employee link or scan the QR code again.
+        </p>
+      </section>
 
-      <div class="details">
+      <article
+        id="profile"
+        class="profile-card"
+        hidden
+      >
 
-        <span id="status" class="badge"></span>
-
-        <h1 id="name"></h1>
-
-        <p id="jobTitle" class="job"></p>
-
-        <p id="department" class="department"></p>
-
-        <dl class="contact-grid">
-
-          <div id="employeeIdRow" class="contact-item">
-            <dt>Employee ID</dt>
-            <dd id="employeeId"></dd>
+        <div class="photo-section">
+          <div class="photo-wrap">
+            <img
+              id="photo"
+              src=""
+              alt="Employee photo"
+            >
           </div>
-
-          <div id="emailRow" class="contact-item">
-            <dt>Email</dt>
-            <dd>
-              <a id="email"></a>
-            </dd>
-          </div>
-
-          <div id="workPhoneRow" class="contact-item">
-            <dt>Work Phone</dt>
-            <dd>
-              <a id="workPhone"></a>
-            </dd>
-          </div>
-
-          <div id="cellPhoneRow" class="contact-item">
-            <dt>Cell Phone</dt>
-            <dd>
-              <a id="cellPhone"></a>
-            </dd>
-          </div>
-
-        </dl>
-
-        <div class="profile-actions">
-
-          <a
-            id="emailButton"
-            class="button button-primary"
-            hidden
-          >
-            Send Email
-          </a>
-
-          <a
-            id="phoneButton"
-            class="button button-secondary"
-            hidden
-          >
-            Call
-          </a>
-
         </div>
 
+        <div class="profile-details">
+
+          <div class="profile-heading">
+            <span
+              id="status"
+              class="status-badge"
+            ></span>
+
+            <h1 id="name"></h1>
+
+            <p
+              id="jobTitle"
+              class="job-title"
+            ></p>
+
+            <p
+              id="department"
+              class="department"
+            ></p>
+          </div>
+
+          <dl class="contact-grid">
+
+            <div
+              id="employeeIdRow"
+              class="contact-item"
+            >
+              <dt>Employee ID</dt>
+              <dd id="employeeId"></dd>
+            </div>
+
+            <div
+              id="emailRow"
+              class="contact-item"
+            >
+              <dt>Email</dt>
+
+              <dd>
+                <a id="email"></a>
+              </dd>
+            </div>
+
+            <div
+              id="workPhoneRow"
+              class="contact-item"
+            >
+              <dt>Work Phone</dt>
+
+              <dd>
+                <a id="workPhone"></a>
+              </dd>
+            </div>
+
+            <div
+              id="cellPhoneRow"
+              class="contact-item"
+            >
+              <dt>Cell Phone</dt>
+
+              <dd>
+                <a id="cellPhone"></a>
+              </dd>
+            </div>
+
+          </dl>
+
+          <div class="profile-actions">
+
+            <a
+              id="emailButton"
+              class="button button-primary"
+              hidden
+            >
+              Send Email
+            </a>
+
+            <a
+              id="phoneButton"
+              class="button button-secondary"
+              hidden
+            >
+              Call
+            </a>
+
+          </div>
+
+        </div>
+      </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-content">
+
+        <p>
+          © <span id="year"></span> Quality & Company Inc.
+        </p>
+
+        <a
+          href="https://www.qualityandcompany.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          www.qualityandcompany.com
+        </a>
+
       </div>
-    </article>
+    </footer>
 
-  </main>
-
-  <footer class="footer">
-    <div class="shell footer-content">
-      <p>
-        © <span id="year"></span> Quality & Company Inc.
-      </p>
-
-      <a
-        href="https://www.qualityandcompany.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        www.qualityandcompany.com
-      </a>
-    </div>
-  </footer>
+  </div>
 
   <script>
     document.getElementById('year').textContent =
