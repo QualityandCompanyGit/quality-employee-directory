@@ -38,6 +38,19 @@
       </div>
     </article>
   </main>
+  <footer class="footer">
+    <p>© <span id="year"></span> Quality and Company Inc.</p>
+    <a
+      href="https://www.qualityandcompany.com/"
+      target="_blank"
+      rel="noopener noreferrer">
+      www.qualityandcompany.com
+    </a>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
   <script src="app.js"></script>
 </body>
 </html>
