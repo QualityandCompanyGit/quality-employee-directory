@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
   <meta
     name="description"
     content="Quality & Company employee profile"
@@ -14,89 +19,172 @@
 </head>
 
 <body>
-  <main class="shell">
+  <div class="site">
 
-    <header class="profile-header">
-      <img
-        src="Logo.png"
-        alt="Quality & Company"
-        class="logo"
-      >
+    <header class="site-header">
+      <div class="header-inner">
+        <a
+          href="https://www.qualityandcompany.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit Quality & Company website"
+        >
+          <img
+            src="Logo.png"
+            alt="Quality & Company"
+            class="site-logo"
+          >
+        </a>
+      </div>
     </header>
 
-    <section id="loading" class="card">
-      Loading employee profile…
-    </section>
+    <main class="page-shell">
 
-    <section id="error" class="card" hidden>
-      <h2>Employee not found</h2>
-      <p>Please confirm the QR code or employee link.</p>
-    </section>
-
-    <article id="profile" class="profile" hidden>
-
-      <div class="photo-wrap">
-        <img id="photo" alt="Employee photo">
-      </div>
-
-      <div class="details">
-        <span id="status" class="badge"></span>
-
-        <h2 id="name"></h2>
-
-        <p id="jobTitle" class="job"></p>
-
-        <p id="department"></p>
-
-        <dl>
-          <div id="employeeIdRow">
-            <dt>Employee ID</dt>
-            <dd id="employeeId"></dd>
-          </div>
-
-          <div id="emailRow">
-            <dt>Email</dt>
-            <dd>
-              <a id="email"></a>
-            </dd>
-          </div>
-
-          <div id="workPhoneRow">
-            <dt>Work phone</dt>
-            <dd>
-              <a id="workPhone"></a>
-            </dd>
-          </div>
-
-          <div id="cellPhoneRow">
-            <dt>Cell phone</dt>
-            <dd>
-              <a id="cellPhone"></a>
-            </dd>
-          </div>
-        </dl>
-      </div>
-
-    </article>
-  </main>
-
-  <footer class="footer">
-    <div class="shell footer-content">
-
-      <p>
-        © <span id="year"></span> Quality & Company Inc.
-      </p>
-
-      <a
-        href="https://www.qualityandcompany.com/"
-        target="_blank"
-        rel="noopener noreferrer"
+      <section
+        id="loading"
+        class="message-card"
       >
-        www.qualityandcompany.com
-      </a>
+        Loading employee profile…
+      </section>
 
-    </div>
-  </footer>
+      <section
+        id="error"
+        class="message-card"
+        hidden
+      >
+        <h1>Employee not found</h1>
+        <p>Please confirm the QR code or employee link.</p>
+      </section>
+
+      <article
+        id="profile"
+        class="profile"
+        hidden
+      >
+
+        <div class="photo-column">
+          <div class="photo-wrap">
+            <img
+              id="photo"
+              alt="Employee photo"
+            >
+          </div>
+        </div>
+
+        <div class="details">
+
+          <div class="profile-heading">
+            <span
+              id="status"
+              class="badge"
+            ></span>
+
+            <h1
+              id="name"
+              class="employee-name"
+            ></h1>
+
+            <p
+              id="jobTitle"
+              class="job"
+            ></p>
+
+            <p
+              id="department"
+              class="department"
+            ></p>
+          </div>
+
+          <div class="divider"></div>
+
+          <section class="contact-section">
+            <h2>Contact Information</h2>
+
+            <dl class="details-grid">
+
+              <div
+                id="employeeIdRow"
+                class="detail-item"
+              >
+                <dt>Employee ID</dt>
+                <dd id="employeeId"></dd>
+              </div>
+
+              <div
+                id="emailRow"
+                class="detail-item"
+              >
+                <dt>Email</dt>
+                <dd>
+                  <a id="email"></a>
+                </dd>
+              </div>
+
+              <div
+                id="workPhoneRow"
+                class="detail-item"
+              >
+                <dt>Work Phone</dt>
+                <dd>
+                  <a id="workPhone"></a>
+                </dd>
+              </div>
+
+              <div
+                id="cellPhoneRow"
+                class="detail-item"
+              >
+                <dt>Cell Phone</dt>
+                <dd>
+                  <a id="cellPhone"></a>
+                </dd>
+              </div>
+
+            </dl>
+          </section>
+
+          <div class="profile-actions">
+
+            <a
+              id="emailButton"
+              class="button button-primary"
+              hidden
+            >
+              Send Email
+            </a>
+
+            <a
+              id="phoneButton"
+              class="button button-secondary"
+              hidden
+            >
+              Call
+            </a>
+
+          </div>
+
+        </div>
+      </article>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>
+          © <span id="year"></span> Quality & Company Inc.
+        </p>
+
+        <a
+          href="https://www.qualityandcompany.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          www.qualityandcompany.com
+        </a>
+      </div>
+    </footer>
+
+  </div>
 
   <script>
     document.getElementById('year').textContent =
