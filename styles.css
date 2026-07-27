@@ -1,24 +1,25 @@
 :root {
-  --page-background: #f3f3f1;
-  --card-background: #ffffff;
-  --soft-background: #f8f8f6;
+  --page-bg: #f4f4f2;
+  --card-bg: #ffffff;
+  --soft-bg: #f8f8f6;
 
-  --text-primary: #171717;
-  --text-secondary: #61615d;
-  --text-light: #85857f;
+  --text: #151515;
+  --muted: #65655f;
+  --light-text: #878781;
 
   --border: #deded9;
   --border-light: #e9e9e5;
 
-  --page-width: 980px;
-  --photo-width: 300px;
+  --page-width: 1000px;
+  --photo-width: 260px;
+  --photo-height: 360px;
 
-  --large-radius: 22px;
-  --medium-radius: 16px;
-  --small-radius: 11px;
+  --radius-large: 20px;
+  --radius-medium: 14px;
+  --radius-small: 10px;
 
-  --card-shadow:
-    0 22px 58px rgba(0, 0, 0, 0.08);
+  --shadow:
+    0 22px 55px rgba(0, 0, 0, 0.09);
 }
 
 *,
@@ -30,7 +31,7 @@
 html {
   min-width: 320px;
   min-height: 100%;
-  background: var(--page-background);
+  background: var(--page-bg);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -39,8 +40,8 @@ body {
   min-height: 100vh;
   margin: 0;
 
-  color: var(--text-primary);
-  background: var(--page-background);
+  color: var(--text);
+  background: var(--page-bg);
 
   font-family:
     "Inter",
@@ -77,11 +78,7 @@ a {
 }
 
 .shell {
-  width: min(
-    calc(100% - 32px),
-    var(--page-width)
-  );
-
+  width: min(calc(100% - 32px), var(--page-width));
   margin-inline: auto;
 }
 
@@ -94,11 +91,10 @@ a {
 
 .header-content {
   display: flex;
-  min-height: 104px;
+  min-height: 94px;
   align-items: center;
   justify-content: center;
-
-  padding-block: 22px;
+  padding-block: 18px;
 }
 
 .logo-link {
@@ -109,30 +105,29 @@ a {
 }
 
 .logo {
-  width: min(100%, 350px);
-  max-height: 56px;
+  width: 270px;
+  height: 52px;
   object-fit: contain;
 }
 
-/* Main area */
+/* Main */
 
 .main-content {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
-
-  padding-block: 46px 54px;
+  padding-block: 42px 50px;
 }
 
-/* Loading and error */
+/* Messages */
 
 .message-card {
   width: min(100%, 560px);
-  padding: 38px 30px;
+  padding: 36px 30px;
 
-  color: var(--text-secondary);
-  background: var(--card-background);
+  color: var(--muted);
+  background: var(--card-bg);
 
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -146,81 +141,85 @@ a {
 .message-card h1 {
   margin: 0 0 8px;
 
-  color: var(--text-primary);
-
+  color: var(--text);
   font-size: 1.8rem;
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
 }
 
 .message-card p {
   margin: 0;
 }
 
-/* Profile */
+/* Standard profile card */
 
 .profile-card {
   display: grid;
-  grid-template-columns:
-    var(--photo-width)
-    minmax(0, 1fr);
-
-  gap: 40px;
+  grid-template-columns: var(--photo-width) minmax(0, 1fr);
+  align-items: center;
+  gap: 34px;
 
   width: 100%;
-  padding: 22px;
+  min-height: 410px;
+  padding: 18px;
 
-  background: var(--card-background);
+  background: var(--card-bg);
 
   border: 1px solid var(--border);
-  border-radius: var(--large-radius);
+  border-radius: var(--radius-large);
 
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--shadow);
 }
 
-/*
-  Photo width stays fixed on desktop.
-
-  The photo height follows the profile card, allowing the
-  profile to become taller when more information is added.
-*/
+/* Fixed image frame */
 
 .photo-section {
   display: flex;
   width: var(--photo-width);
+  align-items: center;
+  justify-content: center;
 }
 
 .photo-wrap {
   position: relative;
 
   width: var(--photo-width);
-  min-height: 430px;
+  height: var(--photo-height);
+
   overflow: hidden;
 
-  background: #ececea;
-  border-radius: var(--medium-radius);
+  background: #efefec;
+  border-radius: var(--radius-medium);
 }
 
 #photo {
-  position: absolute;
-  inset: 0;
-
   width: 100%;
   height: 100%;
 
   object-fit: cover;
   object-position: center top;
 
-  background: #ececea;
+  background: #efefec;
 }
 
-/* Profile details */
+/*
+For generic placeholder images, contain prevents the image
+from becoming oversized or heavily cropped.
+*/
+
+#photo[src*="OIP"],
+#photo[src*="placeholder"],
+#photo[src*="default"] {
+  object-fit: contain;
+  object-position: center;
+  padding: 18px;
+}
+
+/* Details */
 
 .profile-details {
   min-width: 0;
-  align-self: center;
-
-  padding: 24px 12px 24px 0;
+  padding: 20px 10px 20px 0;
 }
 
 .profile-heading {
@@ -231,16 +230,16 @@ a {
   display: inline-flex;
   align-items: center;
 
-  margin-bottom: 14px;
-  padding: 6px 11px;
+  margin-bottom: 13px;
+  padding: 5px 10px;
 
   color: #555550;
-  background: var(--soft-background);
+  background: var(--soft-bg);
 
   border: 1px solid var(--border);
   border-radius: 999px;
 
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   line-height: 1;
@@ -251,26 +250,30 @@ a {
   display: none;
 }
 
+/* Standard name size */
+
 #name {
-  max-width: 100%;
+  width: 100%;
   margin: 0;
 
-  color: var(--text-primary);
+  color: var(--text);
 
-  font-size: clamp(2rem, 4vw, 3.35rem);
+  font-size: clamp(2rem, 3.3vw, 3rem);
   font-weight: 700;
-  letter-spacing: -0.055em;
-  line-height: 1.04;
+  letter-spacing: -0.05em;
+  line-height: 1.06;
 
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .job-title {
-  margin: 14px 0 3px;
+  margin: 12px 0 2px;
 
-  color: var(--text-secondary);
+  color: var(--muted);
 
-  font-size: 1.08rem;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.4;
 }
@@ -282,9 +285,9 @@ a {
 .department {
   margin: 0;
 
-  color: var(--text-light);
+  color: var(--light-text);
 
-  font-size: 0.73rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   line-height: 1.4;
@@ -295,36 +298,35 @@ a {
   display: none;
 }
 
-/* Contact information */
+/* Contact cards */
 
 .contact-grid {
   display: grid;
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 
-  gap: 11px;
-
-  margin: 28px 0 0;
+  margin: 24px 0 0;
 }
 
 .contact-item {
   min-width: 0;
-  padding: 14px 15px;
+  min-height: 66px;
+  padding: 12px 14px;
 
-  background: var(--soft-background);
+  background: var(--soft-bg);
 
   border: 1px solid var(--border-light);
-  border-radius: var(--small-radius);
+  border-radius: var(--radius-small);
 }
 
 .contact-item dt {
-  margin: 0 0 5px;
+  margin: 0 0 4px;
 
-  color: var(--text-light);
+  color: var(--light-text);
 
-  font-size: 0.66rem;
+  font-size: 0.63rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   line-height: 1.3;
   text-transform: uppercase;
 }
@@ -333,11 +335,11 @@ a {
   min-width: 0;
   margin: 0;
 
-  color: var(--text-primary);
+  color: var(--text);
 
-  font-size: 0.93rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  line-height: 1.45;
+  line-height: 1.4;
 
   overflow-wrap: anywhere;
 }
@@ -347,18 +349,14 @@ a {
   text-underline-offset: 3px;
 }
 
-.contact-item a:hover {
-  text-decoration-color: var(--text-primary);
-}
-
 /* Buttons */
 
 .profile-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 11px;
+  gap: 10px;
 
-  margin-top: 25px;
+  margin-top: 20px;
 }
 
 .button {
@@ -366,20 +364,19 @@ a {
   align-items: center;
   justify-content: center;
 
-  min-width: 128px;
-  min-height: 44px;
+  min-width: 112px;
+  min-height: 38px;
 
-  padding: 11px 20px;
+  padding: 9px 18px;
 
   border: 1px solid transparent;
   border-radius: 999px;
 
   font-family: inherit;
-  font-size: 0.87rem;
+  font-size: 0.8rem;
   font-weight: 600;
   line-height: 1;
 
-  text-align: center;
   text-decoration: none;
 
   transition:
@@ -390,11 +387,6 @@ a {
 
 .button:hover {
   transform: translateY(-1px);
-}
-
-.button:focus-visible {
-  outline: 3px solid rgba(17, 17, 17, 0.2);
-  outline-offset: 3px;
 }
 
 .button-primary {
@@ -413,7 +405,7 @@ a {
 }
 
 .button-secondary:hover {
-  background: var(--soft-background);
+  background: var(--soft-bg);
   border-color: #c6c6c0;
 }
 
@@ -426,16 +418,16 @@ a {
 
 .footer-content {
   display: flex;
-  min-height: 82px;
+  min-height: 74px;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 15px;
 
-  padding-block: 18px;
+  padding-block: 16px;
 
   color: #7c7c76;
 
-  font-size: 0.78rem;
+  font-size: 0.73rem;
   text-align: center;
 }
 
@@ -449,44 +441,37 @@ a {
   text-decoration: none;
 }
 
-.footer-content a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-/* Smaller desktop */
+/* Medium screens */
 
 @media (max-width: 900px) {
   :root {
-    --photo-width: 270px;
+    --photo-width: 235px;
+    --photo-height: 330px;
   }
 
   .profile-card {
-    gap: 30px;
+    gap: 26px;
   }
 
   #name {
-    font-size: clamp(
-      1.85rem,
-      4.5vw,
-      2.8rem
-    );
+    font-size: clamp(1.8rem, 3.7vw, 2.6rem);
   }
 }
 
-/* Tablet and mobile */
+/* Mobile */
 
 @media (max-width: 760px) {
   .main-content {
     align-items: flex-start;
-    padding-block: 26px 36px;
+    padding-block: 24px 34px;
   }
 
   .profile-card {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 22px;
 
-    padding: 16px;
+    min-height: 0;
+    padding: 14px;
   }
 
   .photo-section {
@@ -494,28 +479,22 @@ a {
   }
 
   .photo-wrap {
-    width: min(100%, 380px);
-    min-height: 0;
-    aspect-ratio: 4 / 5;
-
+    width: min(100%, 310px);
+    height: 370px;
     margin-inline: auto;
   }
 
   .profile-details {
-    padding: 3px 10px 20px;
+    padding: 0 8px 18px;
     text-align: center;
   }
 
   #name {
-    font-size: clamp(2rem, 10vw, 3rem);
-    letter-spacing: -0.045em;
-
-    /*
-      On smaller screens, wrapping is allowed so long names
-      do not overflow outside the profile card.
-    */
+    font-size: clamp(1.9rem, 9vw, 2.7rem);
 
     white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
   }
 
   .contact-grid {
@@ -529,7 +508,7 @@ a {
 
   .footer-content {
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
   }
 }
 
@@ -537,33 +516,27 @@ a {
 
 @media (max-width: 420px) {
   .shell {
-    width: min(
-      calc(100% - 20px),
-      var(--page-width)
-    );
+    width: min(calc(100% - 18px), var(--page-width));
   }
 
   .header-content {
-    min-height: 88px;
-    padding-block: 19px;
+    min-height: 82px;
+    padding-block: 16px;
   }
 
   .logo {
-    width: min(100%, 290px);
-    max-height: 47px;
+    width: 240px;
+    height: 45px;
   }
 
   .profile-card {
-    padding: 11px;
-    border-radius: 17px;
+    padding: 10px;
+    border-radius: 16px;
   }
 
   .photo-wrap {
-    border-radius: 13px;
-  }
-
-  .profile-details {
-    padding-inline: 7px;
+    width: 100%;
+    height: 340px;
   }
 
   .profile-actions {
@@ -573,41 +546,6 @@ a {
 
   .button {
     width: 100%;
-    min-height: 47px;
-  }
-}
-
-/* Reduced motion */
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition: none !important;
-  }
-}
-
-/* Print */
-
-@media print {
-  body {
-    background: #ffffff;
-  }
-
-  .site-header,
-  .site-footer,
-  .profile-actions {
-    display: none;
-  }
-
-  .main-content,
-  .shell {
-    width: 100%;
-    padding: 0;
-  }
-
-  .profile-card {
-    border: 0;
-    box-shadow: none;
+    min-height: 44px;
   }
 }
