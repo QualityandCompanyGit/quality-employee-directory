@@ -1,15 +1,16 @@
-{
-  "id": 20,
-  "employeeId": "2313",
-  "salutation": "Mr.",
-  "firstName": "samrat",
-  "lastName": "chaps",
-  "jobTitle": "Testing",
-  "department": "ERP",
-  "email": "samrat@qualityandcompany.com",
-  "workPhone": "9055551234",
-  "extension": "213",
-  "status": "Active",
-  "employeeLink": "https://qualityandcompanygit.github.io/quality-employee-directory/?id=20",
-  "photo": "images/20.jpg"
-}
+@@ -1,15 +1,15 @@
+[
+  {
+    "id": 9,
+    "employeeId": "EMP009",
+    "firstName": "Sample",
+    "lastName": "Employee",
+    "jobTitle": "Job Title",
+    "department": "Department",
+    "email": "employee@example.com",
+    "workPhone": "905-555-0100",
+    "cellPhone": "647-555-0100",
+    "status": "Active",
+    "photo": "images/placeholder.svg"
+  }
+]
