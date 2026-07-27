@@ -151,7 +151,7 @@ a {
   margin: 0;
 }
 
-/* Standard profile card */
+/* Profile card */
 
 .profile-card {
   display: grid;
@@ -171,7 +171,7 @@ a {
   box-shadow: var(--shadow);
 }
 
-/* Fixed image frame */
+/* Photo */
 
 .photo-section {
   display: flex;
@@ -201,11 +201,6 @@ a {
 
   background: #efefec;
 }
-
-/*
-For generic placeholder images, contain prevents the image
-from becoming oversized or heavily cropped.
-*/
 
 #photo.placeholder-photo {
   object-fit: contain;
@@ -247,8 +242,6 @@ from becoming oversized or heavily cropped.
 .status-badge:empty {
   display: none;
 }
-
-/* Standard name size */
 
 #name {
   width: 100%;
@@ -363,7 +356,7 @@ from becoming oversized or heavily cropped.
   justify-content: center;
 
   min-width: 112px;
-  min-height: 38px;
+  min-height: 40px;
 
   padding: 9px 18px;
 
@@ -376,15 +369,24 @@ from becoming oversized or heavily cropped.
   line-height: 1;
 
   text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
 
   transition:
     background-color 150ms ease,
     border-color 150ms ease,
-    transform 150ms ease;
+    color 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
 }
 
 .button:hover {
   transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: 3px solid rgba(17, 17, 17, 0.18);
+  outline-offset: 3px;
 }
 
 .button-primary {
@@ -394,6 +396,7 @@ from becoming oversized or heavily cropped.
 
 .button-primary:hover {
   background: #333333;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
 .button-secondary {
@@ -405,6 +408,17 @@ from becoming oversized or heavily cropped.
 .button-secondary:hover {
   background: var(--soft-bg);
   border-color: #c6c6c0;
+}
+
+#linkedinButton {
+  color: #0a66c2;
+  border-color: #b8d3ec;
+}
+
+#linkedinButton:hover {
+  color: #084f96;
+  background: #f3f8fc;
+  border-color: #8ebbe1;
 }
 
 /* Footer */
@@ -504,6 +518,10 @@ from becoming oversized or heavily cropped.
     justify-content: center;
   }
 
+  .profile-actions .button {
+    flex: 1 1 120px;
+  }
+
   .footer-content {
     flex-direction: column;
     gap: 4px;
@@ -540,10 +558,12 @@ from becoming oversized or heavily cropped.
   .profile-actions {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 
-  .button {
+  .profile-actions .button {
     width: 100%;
+    min-width: 0;
     min-height: 44px;
   }
 }
