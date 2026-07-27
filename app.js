@@ -1,254 +1,668 @@
-const q = id => document.getElementById(id);
+:root {
+  --page-bg: #f6f6f4;
+  --card-bg: #ffffff;
+  --soft-bg: #f8f8f7;
 
-const clean = value => {
-  if (value === null || value === undefined) {
-    return '';
-  }
+  --text: #171717;
+  --muted: #62625e;
+  --light-text: #7c7c76;
 
-  return String(value).trim();
-};
+  --border: #deded9;
+  --border-light: #e9e9e5;
 
-const setRowVisibility = (id, value) => {
-  const element = q(id);
+  --page-width: 1000px;
+  --photo-width: 240px;
+  --photo-height: 340px;
 
-  if (element) {
-    element.hidden = !clean(value);
-  }
-};
+  --radius-large: 18px;
+  --radius-medium: 14px;
+  --radius-small: 10px;
 
-const createPhoneLink = value => {
-  return clean(value).replace(/[^+\d]/g, '');
-};
-
-const formatCanadianPhone = value => {
-  const digits = clean(value).replace(/\D/g, '');
-
-  if (digits.length === 11 && digits.startsWith('1')) {
-    return `+1 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
-  }
-
-  if (digits.length === 10) {
-    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
-  }
-
-  return clean(value);
-};
-
-const normalizeWebsiteUrl = value => {
-  const url = clean(value);
-
-  if (!url) {
-    return '';
-  }
-
-  if (
-    url.startsWith('https://') ||
-    url.startsWith('http://')
-  ) {
-    return url;
-  }
-
-  return `https://${url}`;
-};
-
-const setLink = (element, text, href) => {
-  if (!element) {
-    return;
-  }
-
-  element.textContent = text;
-
-  if (text && href) {
-    element.href = href;
-  } else {
-    element.removeAttribute('href');
-  }
-};
-
-async function start() {
-  const employeeId = new URLSearchParams(
-    window.location.search
-  ).get('id');
-
-  if (!employeeId) {
-    throw new Error('Missing employee ID');
-  }
-
-  const response = await fetch(
-    `employees/${encodeURIComponent(employeeId)}.json`,
-    {
-      cache: 'no-store'
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      `Employee data could not be loaded: ${response.status}`
-    );
-  }
-
-  const employee = await response.json();
-
-  const employeeName = [
-    clean(employee.salutation),
-    clean(employee.firstName),
-    clean(employee.lastName)
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  const jobTitle = clean(employee.jobTitle);
-  const department = clean(employee.department);
-
-  const displayedEmployeeId = clean(
-    employee.employeeId ?? employee.id ?? employeeId
-  );
-
-  const status = clean(employee.status) || 'Active';
-  const email = clean(employee.email);
-  const workPhone = clean(employee.workPhone);
-  const extension = clean(employee.extension);
-  const linkedin = normalizeWebsiteUrl(employee.linkedin);
-
-  q('name').textContent =
-    employeeName || 'Employee Profile';
-
-  q('jobTitle').textContent = jobTitle;
-  q('department').textContent = department;
-  q('employeeId').textContent = displayedEmployeeId;
-  q('status').textContent = status;
-  q('extension').textContent = extension;
-
-  setRowVisibility(
-    'employeeIdRow',
-    displayedEmployeeId
-  );
-
-  setRowVisibility('emailRow', email);
-  setRowVisibility('workPhoneRow', workPhone);
-  setRowVisibility('extensionRow', extension);
-
-  const photo = q('photo');
-  const fallbackPhoto = 'images/OIP.webp';
-
-  const hasEmployeePhoto = Boolean(
-    clean(employee.photo)
-  );
-
-  photo.src = hasEmployeePhoto
-    ? clean(employee.photo)
-    : fallbackPhoto;
-
-  photo.classList.toggle(
-    'placeholder-photo',
-    !hasEmployeePhoto
-  );
-
-  photo.alt = employeeName
-    ? `${employeeName} employee photo`
-    : 'Employee photo';
-
-  photo.onerror = () => {
-    photo.onerror = null;
-    photo.src = fallbackPhoto;
-    photo.classList.add('placeholder-photo');
-  };
-
-  setLink(
-    q('email'),
-    email,
-    email ? `mailto:${email}` : ''
-  );
-
-  setLink(
-    q('workPhone'),
-    formatCanadianPhone(workPhone),
-    workPhone
-      ? `tel:${createPhoneLink(workPhone)}`
-      : ''
-  );
-
-  const emailButton = q('emailButton');
-
-  if (emailButton) {
-    emailButton.hidden = !email;
-
-    if (email) {
-      emailButton.href = `mailto:${email}`;
-    } else {
-      emailButton.removeAttribute('href');
-    }
-  }
-
-  const phoneButton = q('phoneButton');
-
-  if (phoneButton) {
-    phoneButton.hidden = !workPhone;
-
-    if (workPhone) {
-      phoneButton.href =
-        `tel:${createPhoneLink(workPhone)}`;
-    } else {
-      phoneButton.removeAttribute('href');
-    }
-  }
-
-  const linkedinButton = q('linkedinButton');
-
-  if (linkedinButton) {
-    linkedinButton.hidden = !linkedin;
-
-    if (linkedin) {
-      linkedinButton.href = linkedin;
-    } else {
-      linkedinButton.removeAttribute('href');
-    }
-  }
-
-  const saveContactButton = q('saveContactButton');
-
-  if (saveContactButton) {
-    const hasContactInformation = Boolean(
-      employeeName ||
-      email ||
-      workPhone
-    );
-
-    saveContactButton.hidden = !hasContactInformation;
-
-    if (hasContactInformation) {
-      saveContactButton.href =
-        `contacts/${encodeURIComponent(employeeId)}.vcf`;
-
-      const contactFileName = [
-        clean(employee.firstName),
-        clean(employee.lastName)
-      ]
-        .filter(Boolean)
-        .join('-')
-        .replace(/[^a-zA-Z0-9-]/g, '');
-
-      saveContactButton.download =
-        `${contactFileName || 'employee-contact'}.vcf`;
-    } else {
-      saveContactButton.removeAttribute('href');
-      saveContactButton.removeAttribute('download');
-    }
-  }
-
-  document.title = employeeName
-    ? `${employeeName} | Quality & Company`
-    : 'Quality & Company Employee Profile';
-
-  q('loading').hidden = true;
-  q('error').hidden = true;
-  q('profile').hidden = false;
+  --shadow:
+    0 18px 45px rgba(0, 0, 0, 0.07);
 }
 
-start().catch(error => {
-  console.error(error);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-  q('loading').hidden = true;
-  q('profile').hidden = true;
-  q('error').hidden = false;
-});
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--page-bg);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+
+  color: var(--text);
+  background: var(--page-bg);
+
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  font-size: 16px;
+  line-height: 1.5;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.shell {
+  width: min(calc(100% - 32px), var(--page-width));
+  margin-inline: auto;
+}
+
+/* Header */
+
+.site-header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.header-content {
+  display: flex;
+  min-height: 92px;
+  align-items: center;
+  justify-content: center;
+  padding-block: 16px;
+}
+
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.logo {
+  width: 270px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Main */
+
+.main-content {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding-block: 32px 42px;
+}
+
+/* Messages */
+
+.message-card {
+  width: min(100%, 560px);
+  padding: 36px 30px;
+
+  color: var(--muted);
+  background: var(--card-bg);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+
+  box-shadow: var(--shadow);
+
+  text-align: center;
+}
+
+.message-card h1 {
+  margin: 0 0 8px;
+
+  color: var(--text);
+
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.message-card p {
+  margin: 0;
+}
+
+/* Profile card */
+
+.profile-card {
+  display: grid;
+  grid-template-columns: var(--photo-width) minmax(0, 1fr);
+  align-items: center;
+  gap: 36px;
+
+  width: 100%;
+  min-height: 390px;
+  padding: 18px;
+
+  background: var(--card-bg);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+
+  box-shadow: var(--shadow);
+}
+
+/* Photo */
+
+.photo-section {
+  display: flex;
+  width: var(--photo-width);
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-wrap {
+  position: relative;
+
+  width: var(--photo-width);
+  height: var(--photo-height);
+
+  overflow: hidden;
+
+  background: #efefec;
+  border-radius: var(--radius-medium);
+}
+
+#photo {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center top;
+
+  background: #efefec;
+}
+
+#photo.placeholder-photo {
+  object-fit: contain;
+  object-position: center;
+  padding: 20px;
+}
+
+/* Profile details */
+
+.profile-details {
+  min-width: 0;
+  padding: 18px 14px 18px 0;
+}
+
+.profile-heading {
+  min-width: 0;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 12px;
+
+  color: #4d4d48;
+
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.status-badge::before {
+  width: 7px;
+  height: 7px;
+
+  background: #3f8f52;
+  border-radius: 50%;
+
+  content: "";
+}
+
+.status-badge:empty {
+  display: none;
+}
+
+#name {
+  width: 100%;
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-title {
+  margin: 12px 0 4px;
+
+  color: var(--muted);
+
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.job-title:empty {
+  display: none;
+}
+
+.department {
+  margin: 0;
+
+  color: var(--light-text);
+
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.department:empty {
+  display: none;
+}
+
+/* Contact cards */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+
+  margin: 24px 0 0;
+}
+
+.contact-item {
+  min-width: 0;
+  min-height: 68px;
+  padding: 13px 14px;
+
+  background: var(--soft-bg);
+
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-small);
+}
+
+.contact-item dt {
+  margin: 0 0 5px;
+
+  color: var(--light-text);
+
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.contact-item dd {
+  min-width: 0;
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+
+  overflow-wrap: anywhere;
+}
+
+.contact-item a {
+  text-decoration-color: #b7b7b2;
+  text-underline-offset: 3px;
+}
+
+/* Buttons */
+
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.button {
+  display: inline-flex;
+  min-width: 118px;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+
+  padding: 11px 20px;
+
+  border: 1px solid transparent;
+  border-radius: 12px;
+
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1;
+
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: 3px solid rgba(17, 17, 17, 0.18);
+  outline-offset: 3px;
+}
+
+.button-primary {
+  color: #ffffff;
+  background: #151515;
+}
+
+.button-primary:hover {
+  background: #333333;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.button-secondary {
+  color: #151515;
+  background: #ffffff;
+  border-color: var(--border);
+}
+
+.button-secondary:hover {
+  background: var(--soft-bg);
+  border-color: #c6c6c0;
+}
+
+.button-linkedin {
+  color: #0a66c2;
+  background: #ffffff;
+  border-color: #b8d3ec;
+}
+
+.button-linkedin:hover {
+  color: #084f96;
+  background: #f3f8fc;
+  border-color: #8ebbe1;
+}
+
+.button-contact {
+  color: #ffffff;
+  background: #2f6f44;
+  border-color: #2f6f44;
+}
+
+.button-contact:hover {
+  background: #275d39;
+  border-color: #275d39;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* Footer */
+
+.site-footer {
+  background: #ffffff;
+  border-top: 1px solid var(--border-light);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1.4fr 1fr;
+  gap: 44px;
+  align-items: start;
+
+  padding-block: 34px;
+
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.footer-brand,
+.footer-contact,
+.footer-hours {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.footer-content p,
+.footer-content address {
+  margin: 0;
+}
+
+.footer-company {
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.footer-copyright {
+  color: var(--light-text);
+  font-size: 0.76rem;
+}
+
+.footer-label {
+  margin-bottom: 3px !important;
+
+  color: var(--text);
+
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.footer-contact address {
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.footer-content a {
+  color: #555550;
+  line-height: 1.5;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+
+  transition: color 150ms ease;
+}
+
+.footer-content a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-website {
+  margin-top: 3px;
+  font-weight: 600;
+}
+
+/* Medium screens */
+
+@media (max-width: 900px) {
+  :root {
+    --photo-width: 225px;
+    --photo-height: 320px;
+  }
+
+  .profile-card {
+    gap: 28px;
+  }
+
+  #name {
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr 1.3fr 1fr;
+    gap: 28px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 760px) {
+  .main-content {
+    align-items: flex-start;
+    padding-block: 24px 32px;
+  }
+
+  .profile-card {
+    grid-template-columns: 1fr;
+    gap: 20px;
+
+    min-height: 0;
+    padding: 14px;
+  }
+
+  .photo-section {
+    width: 100%;
+  }
+
+  .photo-wrap {
+    width: min(100%, 300px);
+    height: 360px;
+    margin-inline: auto;
+  }
+
+  .profile-details {
+    padding: 0 8px 16px;
+    text-align: center;
+  }
+
+  #name {
+    font-size: clamp(1.9rem, 9vw, 2.7rem);
+
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .profile-actions {
+    justify-content: center;
+  }
+
+  .profile-actions .button {
+    flex: 1 1 125px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+
+    padding-block: 28px;
+
+    text-align: center;
+  }
+
+  .footer-brand,
+  .footer-contact,
+  .footer-hours {
+    align-items: center;
+  }
+}
+
+/* Small phones */
+
+@media (max-width: 420px) {
+  .shell {
+    width: min(calc(100% - 18px), var(--page-width));
+  }
+
+  .header-content {
+    min-height: 82px;
+    padding-block: 14px;
+  }
+
+  .logo {
+    width: 235px;
+    height: auto;
+  }
+
+  .profile-card {
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .photo-wrap {
+    width: 100%;
+    height: 335px;
+  }
+
+  .profile-details {
+    padding-inline: 4px;
+  }
+
+  .contact-grid {
+    margin-top: 20px;
+  }
+
+  .profile-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .profile-actions .button {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+  }
+
+  .footer-content {
+    gap: 21px;
+    padding-block: 24px;
+    font-size: 0.8rem;
+  }
+
+  .footer-company {
+    font-size: 0.95rem;
+  }
+}
