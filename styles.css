@@ -106,7 +106,8 @@ a {
 
 .logo {
   width: 270px;
-  height: 52px;
+  height: auto;
+  max-height: 90px;
   object-fit: contain;
 }
 
@@ -592,7 +593,8 @@ a {
 
   .logo {
     width: 240px;
-    height: 45px;
+    height: auto;
+    max-height: 80px;
   }
 
   .profile-card {
