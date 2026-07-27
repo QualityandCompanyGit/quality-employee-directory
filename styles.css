@@ -207,9 +207,7 @@ For generic placeholder images, contain prevents the image
 from becoming oversized or heavily cropped.
 */
 
-#photo[src*="OIP"],
-#photo[src*="placeholder"],
-#photo[src*="default"] {
+#photo.placeholder-photo {
   object-fit: contain;
   object-position: center;
   padding: 18px;
