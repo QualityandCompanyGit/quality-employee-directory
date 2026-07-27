@@ -1,4 +1,5 @@
 const q = id => document.getElementById(id);
+
 const row = (id, value) => {
   q(id).hidden = !value;
 };
@@ -36,6 +37,33 @@ async function start() {
   q('photo').onerror = () => {
     q('photo').src = 'images/OIP.webp';
   };
+
+  // Employee QR code
+  const qrImage = q('employeeQr');
+
+  if (qrImage) {
+    qrImage.src = `qr/${encodeURIComponent(id)}.png`;
+    qrImage.alt = `QR code for ${employee.firstName || 'employee'} ${employee.lastName || ''}`.trim();
+
+    qrImage.onload = () => {
+      qrImage.hidden = false;
+
+      const qrSection = q('employeeQrSection');
+      if (qrSection) {
+        qrSection.hidden = false;
+      }
+    };
+
+    qrImage.onerror = () => {
+      qrImage.hidden = true;
+      qrImage.removeAttribute('src');
+
+      const qrSection = q('employeeQrSection');
+      if (qrSection) {
+        qrSection.hidden = true;
+      }
+    };
+  }
 
   q('email').textContent = employee.email || '';
   q('email').href = employee.email
