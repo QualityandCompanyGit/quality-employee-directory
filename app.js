@@ -1,14 +1,32 @@
 const q = id => document.getElementById(id);
 
 const row = (id, value) => {
-  q(id).hidden = !value;
+  const element = q(id);
+
+  if (element) {
+    element.hidden = !value;
+  }
+};
+
+const clean = value => {
+  if (value === null || value === undefined) {
+    return '';
+  }
+
+  return String(value).trim();
+};
+
+const phoneLink = value => {
+  return clean(value).replace(/[^+\d]/g, '');
 };
 
 async function start() {
-  const id = new URLSearchParams(location.search).get('id');
+  const id = new URLSearchParams(
+    window.location.search
+  ).get('id');
 
   if (!id) {
-    throw new Error('Missing id');
+    throw new Error('Missing employee ID');
   }
 
   const response = await fetch(
@@ -17,50 +35,111 @@ async function start() {
   );
 
   if (!response.ok) {
-    throw new Error(`Employee data load failed: ${response.status}`);
+    throw new Error(
+      `Employee data load failed: ${response.status}`
+    );
   }
 
   const employee = await response.json();
 
-  q('name').textContent = [
-    employee.salutation,
-    employee.firstName,
-    employee.lastName
-  ].filter(Boolean).join(' ');
+  const employeeName = [
+    clean(employee.salutation),
+    clean(employee.firstName),
+    clean(employee.lastName)
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-  q('jobTitle').textContent = employee.jobTitle || '';
-  q('department').textContent = employee.department || '';
-  q('employeeId').textContent = employee.employeeId || '';
-  q('status').textContent = employee.status || 'Active';
+  const jobTitle = clean(employee.jobTitle);
+  const department = clean(employee.department);
+  const employeeId = clean(employee.employeeId);
+  const status = clean(employee.status) || 'Active';
+  const email = clean(employee.email);
+  const workPhone = clean(employee.workPhone);
+  const cellPhone = clean(employee.cellPhone);
 
-  q('photo').src = employee.photo || 'images/OIP.webp';
+  q('name').textContent = employeeName;
+  q('jobTitle').textContent = jobTitle;
+  q('department').textContent = department;
+  q('employeeId').textContent = employeeId;
+  q('status').textContent = status;
 
-  q('photo').onerror = () => {
-    q('photo').src = 'images/OIP.webp';
+  row('employeeIdRow', employeeId);
+  row('emailRow', email);
+  row('workPhoneRow', workPhone);
+  row('cellPhoneRow', cellPhone);
+
+  const photo = q('photo');
+  const fallbackPhoto = 'images/OIP.webp';
+
+  photo.src = clean(employee.photo) || fallbackPhoto;
+
+  photo.alt = employeeName
+    ? `${employeeName} employee photo`
+    : 'Employee photo';
+
+  photo.onerror = () => {
+    photo.onerror = null;
+    photo.src = fallbackPhoto;
   };
 
-  q('email').textContent = employee.email || '';
+  const emailLink = q('email');
 
-  q('email').href = employee.email
-    ? `mailto:${employee.email}`
-    : '#';
+  emailLink.textContent = email;
 
-  q('workPhone').textContent = employee.workPhone || '';
+  if (email) {
+    emailLink.href = `mailto:${email}`;
+  } else {
+    emailLink.removeAttribute('href');
+  }
 
-  q('workPhone').href = employee.workPhone
-    ? `tel:${employee.workPhone.replace(/[^+\d]/g, '')}`
-    : '#';
+  const workPhoneLink = q('workPhone');
 
-  q('cellPhone').textContent = employee.cellPhone || '';
+  workPhoneLink.textContent = workPhone;
 
-  q('cellPhone').href = employee.cellPhone
-    ? `tel:${employee.cellPhone.replace(/[^+\d]/g, '')}`
-    : '#';
+  if (workPhone) {
+    workPhoneLink.href =
+      `tel:${phoneLink(workPhone)}`;
+  } else {
+    workPhoneLink.removeAttribute('href');
+  }
 
-  row('employeeIdRow', employee.employeeId);
-  row('emailRow', employee.email);
-  row('workPhoneRow', employee.workPhone);
-  row('cellPhoneRow', employee.cellPhone);
+  const cellPhoneLink = q('cellPhone');
+
+  cellPhoneLink.textContent = cellPhone;
+
+  if (cellPhone) {
+    cellPhoneLink.href =
+      `tel:${phoneLink(cellPhone)}`;
+  } else {
+    cellPhoneLink.removeAttribute('href');
+  }
+
+  const emailButton = q('emailButton');
+
+  emailButton.hidden = !email;
+
+  if (email) {
+    emailButton.href = `mailto:${email}`;
+  } else {
+    emailButton.removeAttribute('href');
+  }
+
+  const preferredPhone = workPhone || cellPhone;
+  const phoneButton = q('phoneButton');
+
+  phoneButton.hidden = !preferredPhone;
+
+  if (preferredPhone) {
+    phoneButton.href =
+      `tel:${phoneLink(preferredPhone)}`;
+  } else {
+    phoneButton.removeAttribute('href');
+  }
+
+  document.title = employeeName
+    ? `${employeeName} | Quality & Company`
+    : 'Quality & Company Employee Profile';
 
   q('loading').hidden = true;
   q('error').hidden = true;
