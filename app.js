@@ -1,7 +1,11 @@
 const q = id => document.getElementById(id);
 
 const row = (id, value) => {
-  q(id).hidden = !value;
+  const element = q(id);
+
+  if (element) {
+    element.hidden = !value;
+  }
 };
 
 async function start() {
@@ -22,48 +26,34 @@ async function start() {
 
   const employee = await response.json();
 
-  q('name').textContent = [
+  const employeeName = [
     employee.salutation,
     employee.firstName,
     employee.lastName
   ].filter(Boolean).join(' ');
 
+  q('name').textContent = employeeName;
   q('jobTitle').textContent = employee.jobTitle || '';
   q('department').textContent = employee.department || '';
   q('employeeId').textContent = employee.employeeId || '';
   q('status').textContent = employee.status || 'Active';
 
-  q('photo').src = employee.photo || 'images/OIP.webp';
-  q('photo').onerror = () => {
-    q('photo').src = 'images/OIP.webp';
+  row('jobTitleRow', employee.jobTitle);
+  row('departmentRow', employee.department);
+  row('employeeIdRow', employee.employeeId);
+  row('statusRow', employee.status || 'Active');
+
+  const photo = q('photo');
+
+  photo.src = employee.photo || 'images/OIP.webp';
+  photo.alt = employeeName
+    ? `${employeeName} profile photo`
+    : 'Employee profile photo';
+
+  photo.onerror = () => {
+    photo.onerror = null;
+    photo.src = 'images/OIP.webp';
   };
-
-  // Employee QR code
-  const qrImage = q('employeeQr');
-
-  if (qrImage) {
-    qrImage.src = `qr/${encodeURIComponent(id)}.png`;
-    qrImage.alt = `QR code for ${employee.firstName || 'employee'} ${employee.lastName || ''}`.trim();
-
-    qrImage.onload = () => {
-      qrImage.hidden = false;
-
-      const qrSection = q('employeeQrSection');
-      if (qrSection) {
-        qrSection.hidden = false;
-      }
-    };
-
-    qrImage.onerror = () => {
-      qrImage.hidden = true;
-      qrImage.removeAttribute('src');
-
-      const qrSection = q('employeeQrSection');
-      if (qrSection) {
-        qrSection.hidden = true;
-      }
-    };
-  }
 
   q('email').textContent = employee.email || '';
   q('email').href = employee.email
@@ -80,10 +70,13 @@ async function start() {
     ? `tel:${employee.cellPhone.replace(/[^+\d]/g, '')}`
     : '#';
 
-  row('employeeIdRow', employee.employeeId);
   row('emailRow', employee.email);
   row('workPhoneRow', employee.workPhone);
   row('cellPhoneRow', employee.cellPhone);
+
+  document.title = employeeName
+    ? `${employeeName} | Quality & Company`
+    : 'Employee Profile | Quality & Company';
 
   q('loading').hidden = true;
   q('error').hidden = true;
@@ -92,6 +85,7 @@ async function start() {
 
 start().catch(error => {
   console.error(error);
+
   q('loading').hidden = true;
   q('profile').hidden = true;
   q('error').hidden = false;
