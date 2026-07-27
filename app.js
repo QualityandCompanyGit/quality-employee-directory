@@ -205,6 +205,37 @@ async function start() {
     }
   }
 
+  const saveContactButton = q('saveContactButton');
+
+  if (saveContactButton) {
+    const hasContactInformation = Boolean(
+      employeeName ||
+      email ||
+      workPhone
+    );
+
+    saveContactButton.hidden = !hasContactInformation;
+
+    if (hasContactInformation) {
+      saveContactButton.href =
+        `contacts/${encodeURIComponent(employeeId)}.vcf`;
+
+      const contactFileName = [
+        clean(employee.firstName),
+        clean(employee.lastName)
+      ]
+        .filter(Boolean)
+        .join('-')
+        .replace(/[^a-zA-Z0-9-]/g, '');
+
+      saveContactButton.download =
+        `${contactFileName || 'employee-contact'}.vcf`;
+    } else {
+      saveContactButton.removeAttribute('href');
+      saveContactButton.removeAttribute('download');
+    }
+  }
+
   document.title = employeeName
     ? `${employeeName} | Quality & Company`
     : 'Quality & Company Employee Profile';
