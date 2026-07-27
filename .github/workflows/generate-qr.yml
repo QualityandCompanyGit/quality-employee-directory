@@ -40,10 +40,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Generate employee QR codes
+      - name: Generate employee QR PNG files
         run: npm run generate-qr
 
-      - name: Commit generated QR files
+      - name: Remove non-PNG QR files
+        run: |
+          if [ -d "qr" ]; then
+            find qr -type f ! -name "*.png" -delete
+          fi
+
+      - name: Commit generated QR PNG files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -54,7 +60,7 @@ jobs:
           git status --short
 
           if git diff --cached --quiet; then
-            echo "No QR changes to commit."
+            echo "No QR PNG changes to commit."
             exit 0
           fi
 
