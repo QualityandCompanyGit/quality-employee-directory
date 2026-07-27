@@ -34,6 +34,23 @@ const formatCanadianPhone = value => {
   return clean(value);
 };
 
+const normalizeWebsiteUrl = value => {
+  const url = clean(value);
+
+  if (!url) {
+    return '';
+  }
+
+  if (
+    url.startsWith('https://') ||
+    url.startsWith('http://')
+  ) {
+    return url;
+  }
+
+  return `https://${url}`;
+};
+
 const setLink = (element, text, href) => {
   if (!element) {
     return;
@@ -91,6 +108,7 @@ async function start() {
   const email = clean(employee.email);
   const workPhone = clean(employee.workPhone);
   const extension = clean(employee.extension);
+  const linkedin = normalizeWebsiteUrl(employee.linkedin);
 
   q('name').textContent =
     employeeName || 'Employee Profile';
@@ -172,6 +190,18 @@ async function start() {
         `tel:${createPhoneLink(workPhone)}`;
     } else {
       phoneButton.removeAttribute('href');
+    }
+  }
+
+  const linkedinButton = q('linkedinButton');
+
+  if (linkedinButton) {
+    linkedinButton.hidden = !linkedin;
+
+    if (linkedin) {
+      linkedinButton.href = linkedin;
+    } else {
+      linkedinButton.removeAttribute('href');
     }
   }
 
